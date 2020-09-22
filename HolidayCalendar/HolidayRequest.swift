@@ -16,13 +16,24 @@ struct HolidayRequest {
     let resourceURL: URL
     let keyAPI = "cb5a03638a4a17901574b812e20a2fcbd1a14faf"
     
-    init(countryCode: String) {
+    init(searchText: String) {
         let date = Date()
         let format = DateFormatter()
         format.dateFormat = "yyyy"
         let currentYear = format.string(from: date)
+        let countryCode: String
+        let inputYear: String
+        var searchTextArr: [String]
+        if searchText.contains(",") {
+            searchTextArr = searchText.components(separatedBy: ",")
+            countryCode = searchTextArr[0]
+            inputYear = searchTextArr[1]
+        } else {
+            countryCode = searchText
+            inputYear = ""
+        }
         
-        let resourceString = "https://calendarific.com/api/v2/holidays?api_key=\(keyAPI)&country=\(countryCode)&year=\(currentYear)"
+        let resourceString = "https://calendarific.com/api/v2/holidays?api_key=\(keyAPI)&country=\(countryCode)&year=\(inputYear == "" ? currentYear : inputYear)"
         
         guard let resourceURL = URL(string: resourceString) else {
             fatalError()

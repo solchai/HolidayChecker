@@ -43,12 +43,18 @@ class HolidaysTableViewController: UITableViewController {
         
         return cell
     }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+            self.view.endEditing(true)
+            return false
+        }
 }
 
 extension HolidaysTableViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        self.searchBar.endEditing(true)
         guard let searchBarText =  searchBar.text else { return }
-        let holidayRequest = HolidayRequest(countryCode: searchBarText)
+        let holidayRequest = HolidayRequest(searchText: searchBarText)
         holidayRequest.getHolidays { [weak self] result in //weak self gest rid of any retained cycles
             switch result {
             case .failure(let error):
